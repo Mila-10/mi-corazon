@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mi corazón es tuyo ❤️</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Georgia, "Times New Roman", serif;
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* ================================
+           BACKGROUND PHOTO
+           ================================ */
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+
+            background-image:
+                linear-gradient(
+                    rgba(80, 0, 40, 0.55),
+                    rgba(20, 0, 50, 0.75)
+                ),
+                url("her-photo.jpeg");
+
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            z-index: -2;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255, 0, 102, 0.25),
+                    rgba(128, 0, 255, 0.25),
+                    rgba(255, 0, 128, 0.25)
+                );
+
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* ================================
+           SCREENS
+           ================================ */
+
+        .screen {
+            min-height: 100vh;
+            width: 100%;
+
+            display: none;
+
+            align-items: center;
+            justify-content: center;
+
+            text-align: center;
+
+            padding: 30px;
+
+            animation: fadeIn 0.8s ease;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        .content {
+            width: min(900px, 95%);
+
+            padding: 45px 30px;
+
+            border-radius: 30px;
+
+            background: rgba(0, 0, 0, 0.45);
+
+            backdrop-filter: blur(12px);
+
+            box-shadow:
+                0 0 40px rgba(255, 0, 128, 0.45),
+                0 0 80px rgba(128, 0, 255, 0.25);
+        }
+
+        /* ================================
+           TEXT
+           ================================ */
+
+        h1 {
+            font-size: clamp(2rem, 6vw, 4.5rem);
+
+            margin-bottom: 25px;
+
+            text-shadow:
+                0 0 10px white,
+                0 0 30px rgba(255, 0, 128, 0.8);
+        }
+
+        h2 {
+            font-size: clamp(1.7rem, 5vw, 3.5rem);
+
+            margin-bottom: 25px;
+        }
+
+        p {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+
+            line-height: 1.7;
+        }
+
+        /* ================================
+           BUTTONS
+           ================================ */
+
+        .buttons {
+            margin-top: 40px;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            gap: 30px;
+
+            min-height: 100px;
+        }
+
+        button {
+            border: none;
+
+            cursor: pointer;
+
+            padding: 18px 38px;
+
+            border-radius: 50px;
+
+            font-size: 1.2rem;
+
+            font-weight: bold;
+
+            color: white;
+
+            transition:
+                transform 0.35s ease,
+                opacity 0.35s ease;
+
+            box-shadow:
+                0 8px 25px rgba(0, 0, 0, 0.35);
+        }
+
+        #yesButton {
+            background:
+                linear-gradient(
+                    135deg,
+                    #ff1493,
+                    #ff4da6
+                );
+
+            transform: scale(1);
+        }
+
+        #noButton {
+            background:
+                linear-gradient(
+                    135deg,
+                    #555,
+                    #222
+                );
+
+            transform: scale(1);
+        }
+
+        .confirmation-button {
+            background:
+                linear-gradient(
+                    135deg,
+                    #ff1493,
+                    #8a2be2
+                );
+
+            font-size: 1.4rem;
+        }
+
+        .continue-button {
+            margin-top: 35px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ff1493,
+                    #8a2be2
+                );
+        }
+
+        /* ================================
+           SPEECH BUBBLE
+           ================================ */
+
+        .speech-bubble {
+            position: relative;
+
+            margin: 35px auto;
+
+            max-width: 700px;
+
+            padding: 25px;
+
+            border-radius: 25px;
+
+            background: rgba(255, 255, 255, 0.94);
+
+            color: #4a0033;
+
+            box-shadow:
+                0 0 35px rgba(255, 255, 255, 0.4);
+
+            animation:
+                bubbleAppear 1s ease;
+        }
+
+        .speech-bubble::after {
+            content: "";
+
+            position: absolute;
+
+            bottom: -20px;
+
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            border-left: 20px solid transparent;
+
+            border-right: 20px solid transparent;
+
+            border-top: 25px solid
+                rgba(255, 255, 255, 0.94);
+        }
+
+        /* ================================
+           PHOTO INSIDE SPEECH BUBBLE
+           ================================ */
+
+        .speech-photo {
+            width: 120px;
+
+            height: 120px;
+
+            object-fit: cover;
+
+            border-radius: 50%;
+
+            display: block;
+
+            margin: 0 auto 20px;
+
+            border: 5px solid white;
+
+            box-shadow:
+                0 0 25px rgba(255, 20, 147, 0.6);
+        }
+
+        /* ================================
+           TIMER
+           ================================ */
+
+        #loveTimer {
+            margin-top: 30px;
+
+            padding: 18px;
+
+            border-radius: 15px;
+
+            background:
+                rgba(0, 0, 0, 0.5);
+
+            font-family: monospace;
+
+            font-size:
+                clamp(1rem, 3vw, 1.5rem);
+
+            white-space: nowrap;
+
+            overflow-x: auto;
+        }
+
+        /* ================================
+           POEM
+           ================================ */
+
+        .poem-container {
+            max-height: 80vh;
+
+            overflow-y: auto;
+
+            padding: 25px;
+        }
+
+        .poem {
+            white-space: pre-line;
+
+            font-size:
+                clamp(1rem, 2.4vw, 1.35rem);
+
+            line-height: 2;
+
+            text-shadow:
+                0 2px 5px rgba(0, 0, 0, 0.7);
+        }
+
+        .poem-title {
+            margin-bottom: 35px;
+        }
+
+        /* ================================
+           HEARTS
+           ================================ */
+
+        .heart {
+            position: fixed;
+
+            bottom: -30px;
+
+            font-size: 25px;
+
+            animation:
+                floatHeart 6s linear forwards;
+
+            pointer-events: none;
+        }
+
+        @keyframes floatHeart {
+
+            0% {
+                transform:
+                    translateY(0)
+                    scale(1);
+
+                opacity: 1;
+            }
+
+            100% {
+                transform:
+                    translateY(-110vh)
+                    scale(1.8);
+
+                opacity: 0;
+            }
+        }
+
+        @keyframes bubbleAppear {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    scale(0.7)
+                    translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    scale(1)
+                    translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    scale(0.97);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    scale(1);
+            }
+        }
+
+        /* ================================
+           MOBILE
+           ================================ */
+
+        @media (max-width: 600px) {
+
+            .screen {
+                padding: 15px;
+            }
+
+            .content {
+                padding: 35px 18px;
+
+                border-radius: 22px;
+            }
+
+            .buttons {
+                gap: 15px;
+            }
+
+            button {
+                padding: 15px 25px;
+
+                font-size: 1rem;
+            }
+
+            .speech-photo {
+                width: 100px;
+
+                height: 100px;
+            }
+
+        }
+
+
+        /* ================================
+           FULL PHOTO VIEWER
+           ================================ */
+
+        .speech-photo {
+            cursor: zoom-in;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .speech-photo:hover {
+            transform: scale(1.04);
+            box-shadow: 0 0 35px rgba(255, 20, 147, 0.8);
+        }
+
+        .photo-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+            background: rgba(0, 0, 0, 0.88);
+            backdrop-filter: blur(8px);
+            cursor: zoom-out;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        .photo-modal.active {
+            display: flex;
+        }
+
+        .photo-modal img {
+            max-width: 95vw;
+            max-height: 92vh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 14px;
+            box-shadow: 0 0 45px rgba(255, 20, 147, 0.55);
+            animation: photoZoomIn 0.35s ease;
+            cursor: default;
+        }
+
+        .close-photo {
+            position: fixed;
+            top: 18px;
+            right: 25px;
+            width: 52px;
+            height: 52px;
+            padding: 0;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.65);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            color: white;
+            font-size: 2rem;
+            line-height: 1;
+            z-index: 10000;
+            cursor: pointer;
+        }
+
+        .photo-hint {
+            margin-top: 12px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes photoZoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.85);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- ==========================================
+         FULL PHOTO VIEWER
+         ========================================== -->
+
+    <div id="photoModal" class="photo-modal" aria-hidden="true">
+        <button class="close-photo" id="closePhoto" aria-label="Close photo">
+            &times;
+        </button>
+
+        <img
+            id="fullPhoto"
+            src="her-photo.jpeg"
+            alt="Full size special photo">
+
+    </div>
+
+
+
+    <!-- ==========================================
+         PHASE 1
+         ========================================== -->
+
+    <section id="phase1" class="screen active">
+
+        <div class="content">
+
+            <h1>
+                ❤️ I Have A Question ❤️
+            </h1>
+
+            <p>
+                There is something I've been wanting
+                to ask you...
+            </p>
+
+            <br>
+
+            <h2>
+                Will you be my girlfriend? ❤️
+            </h2>
+
+            <div class="buttons">
+
+                <button id="noButton">
+                    NO 💔
+                </button>
+
+                <button id="yesButton">
+                    YES ❤️
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==========================================
+         CONFIRMATION
+         ========================================== -->
+
+    <section id="confirmation" class="screen">
+
+        <div class="content">
+
+            <h1>
+                Are you sure? ❤️
+            </h1>
+
+            <p>
+                I just want to make sure you
+                really mean it...
+            </p>
+
+            <div class="buttons">
+
+                <button
+                    class="confirmation-button"
+                    id="confirmYes">
+
+                    YES, I'M SURE ❤️
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==========================================
+         PHASE 2
+         ========================================== -->
+
+    <section id="phase2" class="screen">
+
+        <div class="content">
+
+            <h1>
+                🎉 SHE SAID YES! 🎉
+            </h1>
+
+            <div class="speech-bubble">
+
+                <img
+                    src="her-photo.jpeg"
+                    class="speech-photo"
+                    alt="A special photo">
+
+                <strong>
+                    Because you said yes... ❤️
+                </strong>
+
+                <br><br>
+
+                I just want you to know how much
+                this moment means to me.
+
+            </div>
+
+            <p>
+                You said YES on:
+            </p>
+
+            <h2 id="approvalDate">
+                --
+            </h2>
+
+            <p>
+                At exactly:
+            </p>
+
+            <h2 id="approvalTime">
+                --
+            </h2>
+
+            <div class="love-message">
+
+                My love for you has no limits.<br>
+
+                My love for you has no condition.<br><br>
+
+                But from this day,
+                <span id="loveStartDate"></span>,
+                at <span id="loveStartTime"></span>
+                till eternity I will love you.
+
+            </div>
+
+            <div id="loveTimer">
+
+                00 Days :
+                00 Hours :
+                00 Minutes :
+                00 Seconds ❤️
+
+            </div>
+
+            <button
+                class="continue-button"
+                id="continueButton">
+
+                Continue ❤️
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==========================================
+         PHASE 3
+         ========================================== -->
+
+    <section id="phase3" class="screen">
+
+        <div class="content">
+
+            <h1 class="poem-title">
+                Mi corazón es tuyo ❤️
+            </h1>
+
+            <div class="poem-container">
+
+                <div class="poem">
+
+Which words are best used to describe such beauty?
+Amazing, pretty, gorgeous or maybe specificity.
+From the stars back, a gorgeous smile all I see is you.
+oh what I wonder, your body filled with mesmerised perfection.
+When I first laid eyes on you I saw my future, but not anymore?
+
+For you I’d die, for you I’d cry
+Not until I saw those constellations for direction to your heart
+The most delicate touches, the most fantastic blushes
+The most impassioned lover I need
+
+With eyes glittering like stars, a perfect body suits too
+Living to immortalise the angelic eternal love we might have
+The burden I don’t mind, abit jealousy I amuse not for trust but you
+With a flashlight you shine a spotlight on us, getting us through the night
+oh I was wrong. Laying my eyes on you wasn’t a mistake, cause in you is my future
+
+For you I’d die, for you I’d cry
+Not until I heard your voice, I had fallen deeply for you
+The most delicate touches the most fantastic blushes
+The most beguiling angel to ever live
+
+Looking at you I get goosebumps, with your semblance just a sensual pleasure
+With this poem, I hope you will dedicate a space in your heart for me
+I might not be the man you want, but I’m the gentleman you need
+Call me a hater but truth be told, that guys time is labelled anachronism
+Call me Goldberg cause with everything happening “I’m next!”
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <script>
+
+        // ==========================================
+        // PHASES
+        // ==========================================
+
+        const phase1 =
+            document.getElementById("phase1");
+
+        const confirmation =
+            document.getElementById("confirmation");
+
+        const phase2 =
+            document.getElementById("phase2");
+
+        const phase3 =
+            document.getElementById("phase3");
+
+
+        function showPhase(phase) {
+
+            phase1.classList.remove("active");
+
+            confirmation.classList.remove("active");
+
+            phase2.classList.remove("active");
+
+            phase3.classList.remove("active");
+
+            phase.classList.add("active");
+
+            window.scrollTo(0, 0);
+
+        }
+
+
+        // ==========================================
+        // YES / NO
+        // ==========================================
+
+        const yesButton =
+            document.getElementById("yesButton");
+
+        const noButton =
+            document.getElementById("noButton");
+
+
+        let yesSize = 1;
+
+        let noSize = 1;
+
+        let noClicks = 0;
+
+
+        noButton.addEventListener(
+            "click",
+            function () {
+
+                noClicks++;
+
+                noSize -= 0.20;
+
+                yesSize += 0.15;
+
+
+                if (noSize < 0.25) {
+
+                    noSize = 0.25;
+
+                }
+
+
+                if (yesSize > 2) {
+
+                    yesSize = 2;
+
+                }
+
+
+                noButton.style.transform =
+                    `scale(${noSize})`;
+
+                yesButton.style.transform =
+                    `scale(${yesSize})`;
+
+
+                /*
+                    After the third NO,
+                    the button disappears.
+                */
+
+                if (noClicks >= 3) {
+
+                    noButton.style.opacity = "0";
+
+                    noButton.style.pointerEvents =
+                        "none";
+
+                    setTimeout(function () {
+
+                        noButton.style.display =
+                            "none";
+
+                    }, 350);
+
+                }
+
+            }
+        );
+
+
+        // ==========================================
+        // YES
+        // ==========================================
+
+        yesButton.addEventListener(
+            "click",
+            function () {
+
+                showPhase(confirmation);
+
+            }
+        );
+
+
+        // ==========================================
+        // CONFIRM YES
+        // ==========================================
+
+        const confirmYes =
+            document.getElementById("confirmYes");
+
+        let approvalTime;
+
+
+        confirmYes.addEventListener(
+            "click",
+            function () {
+
+                approvalTime = new Date();
+
+                startPhase2();
+
+            }
+        );
+
+
+        // ==========================================
+        // PHASE 2
+        // ==========================================
+
+        function startPhase2() {
+
+            showPhase(phase2);
+
+
+            document.getElementById(
+                "approvalDate"
+            ).textContent =
+                formatDate(approvalTime);
+
+
+            document.getElementById(
+                "approvalTime"
+            ).textContent =
+                formatTime(approvalTime);
+
+
+            document.getElementById(
+                "loveStartDate"
+            ).textContent =
+                formatDate(approvalTime);
+
+
+            document.getElementById(
+                "loveStartTime"
+            ).textContent =
+                formatTime(approvalTime);
+
+
+            createHearts();
+
+            updateLoveTimer();
+
+            setInterval(
+                updateLoveTimer,
+                1000
+            );
+
+        }
+
+
+        // ==========================================
+        // DATE
+        // ==========================================
+
+        function formatDate(date) {
+
+            return date.toLocaleDateString(
+                "en-GB",
+                {
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric"
+                }
+            );
+
+        }
+
+
+        // ==========================================
+        // TIME
+        // ==========================================
+
+        function formatTime(date) {
+
+            return date.toLocaleTimeString(
+                "en-GB",
+                {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit"
+                }
+            );
+
+        }
+
+
+        // ==========================================
+        // LIVE TIMER
+        // ==========================================
+
+        function updateLoveTimer() {
+
+            if (!approvalTime) {
+
+                return;
+
+            }
+
+
+            const now =
+                new Date();
+
+
+            const difference =
+                now.getTime()
+                -
+                approvalTime.getTime();
+
+
+            const totalSeconds =
+                Math.floor(
+                    difference / 1000
+                );
+
+
+            const days =
+                Math.floor(
+                    totalSeconds / 86400
+                );
+
+
+            const hours =
+                Math.floor(
+                    (totalSeconds % 86400)
+                    / 3600
+                );
+
+
+            const minutes =
+                Math.floor(
+                    (totalSeconds % 3600)
+                    / 60
+                );
+
+
+            const seconds =
+                totalSeconds % 60;
+
+
+            document.getElementById(
+                "loveTimer"
+            ).textContent =
+
+                `${String(days).padStart(2, "0")} Days : ` +
+
+                `${String(hours).padStart(2, "0")} Hours : ` +
+
+                `${String(minutes).padStart(2, "0")} Minutes : ` +
+
+                `${String(seconds).padStart(2, "0")} Seconds ❤️`;
+
+        }
+
+
+        // ==========================================
+        // CONTINUE TO POEM
+        // ==========================================
+
+        document.getElementById(
+            "continueButton"
+        ).addEventListener(
+            "click",
+            function () {
+
+                showPhase(phase3);
+
+                createHearts();
+
+            }
+        );
+
+
+        // ==========================================
+        // FLOATING HEARTS
+        // ==========================================
+
+        function createHearts() {
+
+            for (
+                let i = 0;
+                i < 15;
+                i++
+            ) {
+
+                setTimeout(
+                    function () {
+
+                        const heart =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        heart.className =
+                            "heart";
+
+
+                        const hearts = [
+                            "❤️",
+                            "💕",
+                            "💖",
+                            "💗",
+                            "💓",
+                            "💞",
+                            "💘"
+                        ];
+
+
+                        heart.textContent =
+                            hearts[
+                                Math.floor(
+                                    Math.random()
+                                    *
+                                    hearts.length
+                                )
+                            ];
+
+
+                        heart.style.left =
+                            Math.random()
+                            * 100
+                            + "vw";
+
+
+                        heart.style.animationDuration =
+                            (
+                                4
+                                +
+                                Math.random() * 4
+                            )
+                            + "s";
+
+
+                        document.body.appendChild(
+                            heart
+                        );
+
+
+                        setTimeout(
+                            function () {
+
+                                heart.remove();
+
+                            },
+                            8000
+                        );
+
+                    },
+                    i * 250
+                );
+
+            }
+
+        }
+
+    </script>
+
+</body>
+
+</html>
