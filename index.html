@@ -36,7 +36,7 @@
                     rgba(80, 0, 40, 0.55),
                     rgba(20, 0, 50, 0.75)
                 ),
-                url("her-photo.jpeg");
+                url("her-photo.jpg");
 
             background-size: cover;
             background-position: center;
@@ -439,111 +439,10 @@
 
         }
 
-
-        /* ================================
-           FULL PHOTO VIEWER
-           ================================ */
-
-        .speech-photo {
-            cursor: zoom-in;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .speech-photo:hover {
-            transform: scale(1.04);
-            box-shadow: 0 0 35px rgba(255, 20, 147, 0.8);
-        }
-
-        .photo-modal {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 25px;
-            background: rgba(0, 0, 0, 0.88);
-            backdrop-filter: blur(8px);
-            cursor: zoom-out;
-            animation: modalFadeIn 0.3s ease;
-        }
-
-        .photo-modal.active {
-            display: flex;
-        }
-
-        .photo-modal img {
-            max-width: 95vw;
-            max-height: 92vh;
-            width: auto;
-            height: auto;
-            object-fit: contain;
-            border-radius: 14px;
-            box-shadow: 0 0 45px rgba(255, 20, 147, 0.55);
-            animation: photoZoomIn 0.35s ease;
-            cursor: default;
-        }
-
-        .close-photo {
-            position: fixed;
-            top: 18px;
-            right: 25px;
-            width: 52px;
-            height: 52px;
-            padding: 0;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.65);
-            border: 2px solid rgba(255, 255, 255, 0.8);
-            color: white;
-            font-size: 2rem;
-            line-height: 1;
-            z-index: 10000;
-            cursor: pointer;
-        }
-
-        .photo-hint {
-            margin-top: 12px;
-            font-size: 0.9rem;
-            opacity: 0.7;
-        }
-
-        @keyframes modalFadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes photoZoomIn {
-            from {
-                opacity: 0;
-                transform: scale(0.85);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
     </style>
 </head>
 
 <body>
-
-    <!-- ==========================================
-         FULL PHOTO VIEWER
-         ========================================== -->
-
-    <div id="photoModal" class="photo-modal" aria-hidden="true">
-        <button class="close-photo" id="closePhoto" aria-label="Close photo">
-            &times;
-        </button>
-
-        <img
-            id="fullPhoto"
-            src="her-photo.jpeg"
-            alt="Full size special photo">
-
-    </div>
-
 
 
     <!-- ==========================================
@@ -635,7 +534,7 @@
             <div class="speech-bubble">
 
                 <img
-                    src="her-photo.jpeg"
+                    src="her-photo.jpg"
                     class="speech-photo"
                     alt="A special photo">
 
@@ -800,70 +699,77 @@ Call me Goldberg cause with everything happening “I’m next!”
         const noButton =
             document.getElementById("noButton");
 
+        /*
+            NO is an escape button.
+            It never registers a click. When the mouse gets close,
+            it jumps to a random safe position inside the screen.
+        */
+        noButton.addEventListener("mouseenter", moveNoButton);
+        noButton.addEventListener("pointerdown", function (event) {
+            event.preventDefault();
+            moveNoButton();
+        });
 
-        let yesSize = 1;
+        document.addEventListener("mousemove", function (event) {
+            const rect = noButton.getBoundingClientRect();
+            const buttonCenterX = rect.left + rect.width / 2;
+            const buttonCenterY = rect.top + rect.height / 2;
+            const distance = Math.hypot(
+                event.clientX - buttonCenterX,
+                event.clientY - buttonCenterY
+            );
 
-        let noSize = 1;
-
-        let noClicks = 0;
-
-
-        noButton.addEventListener(
-            "click",
-            function () {
-
-                noClicks++;
-
-                noSize -= 0.20;
-
-                yesSize += 0.15;
-
-
-                if (noSize < 0.25) {
-
-                    noSize = 0.25;
-
-                }
-
-
-                if (yesSize > 2) {
-
-                    yesSize = 2;
-
-                }
-
-
-                noButton.style.transform =
-                    `scale(${noSize})`;
-
-                yesButton.style.transform =
-                    `scale(${yesSize})`;
-
-
-                /*
-                    After the third NO,
-                    the button disappears.
-                */
-
-                if (noClicks >= 3) {
-
-                    noButton.style.opacity = "0";
-
-                    noButton.style.pointerEvents =
-                        "none";
-
-                    setTimeout(function () {
-
-                        noButton.style.display =
-                            "none";
-
-                    }, 350);
-
-                }
-
+            // Escape before the cursor can reach the button.
+            if (distance < 110) {
+                moveNoButton();
             }
-        );
+        });
 
+        function moveNoButton() {
+            const margin = 25;
+            const buttonWidth = noButton.offsetWidth;
+            const buttonHeight = noButton.offsetHeight;
+
+            // Keep the button inside the visible screen.
+            const maxX = Math.max(
+                margin,
+                window.innerWidth - buttonWidth - margin
+            );
+            const maxY = Math.max(
+                margin,
+                window.innerHeight - buttonHeight - margin
+            );
+
+            let x;
+            let y;
+            let attempts = 0;
+
+            // Choose a genuinely random open-screen position.
+            do {
+                x = margin + Math.random() * (maxX - margin);
+                y = margin + Math.random() * (maxY - margin);
+                attempts++;
+            } while (
+                attempts < 30 &&
+                Math.hypot(
+                    x + buttonWidth / 2 - window.innerWidth / 2,
+                    y + buttonHeight / 2 - window.innerHeight / 2
+                ) < 130
+            );
+
+            noButton.style.position = "fixed";
+            noButton.style.left = `${x}px`;
+            noButton.style.top = `${y}px`;
+            noButton.style.zIndex = "9999";
+            noButton.style.transition = "left 0.12s ease, top 0.12s ease";
+        }
+
+        // Recalculate its safe position after resizing the browser.
+        window.addEventListener("resize", function () {
+            if (noButton.style.position === "fixed") {
+                moveNoButton();
+            }
+        });
 
         // ==========================================
         // YES
